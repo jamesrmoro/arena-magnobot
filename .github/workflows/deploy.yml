@@ -24,4 +24,4 @@ jobs:
 
       - name: Fazer upload para OSS
         run: |
-          ./ossutil64 cp -r dist/ oss://${{ secrets.OSS_BUCKET }}/ --force
+          ./ossutil64 cp -r public/ oss://${{ secrets.OSS_BUCKET }}/ --force
