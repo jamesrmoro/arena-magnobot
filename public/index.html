@@ -1,11 +1,325 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  	<meta charset="UTF-8" />
-  	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  	<title>Arena Magnobot</title>
-</head>
-<body>
-	<h1>Arena Magnobot</h1>
-</body>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" type="image/png" href="./assets/favicon/favicon-96x96.png" sizes="96x96" />
+        <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicon/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-title" content="Arena Magnobot" />
+        <link rel="manifest" href="manifest.json">
+        <meta name="theme-color" content="#fb8c00">
+        <title>Arena Magnobot</title>
+        <script src="./assets/js/createjs.min.js"></script>
+        <link rel="stylesheet" href="./assets/css/style.css?version=7">
+    </head>
+    <body>
+        <div id="rotateWarning">
+            Rotate your device to portrait mode to play!
+        </div>
+        <div id="ui-container">
+            <div id="ui">Points: <span id="score">0</span> | Highscore: <span id="highscore">0</span></div>
+            <button id="soundToggle">🔊 Sound: ON</button>
+        </div>
+        <div id="tutorialModal" style="display: none;">
+          <div id="tutorialContent">
+            <div id="tutorialImageWrapper" class="skeleton">
+                <span id="loadingText" class="loading-text">Loading ...</span>
+                <img id="tutorialImage" src="./assets/images/tutorial.gif" alt="Tutorial" style="display: none;" />
+            </div>
+            <p id="tutorialCaption" class="tutorial-caption">Swipe up, down or sideways to change lanes</p>
+            <button id="closeTutorialBtn">Go it</button>
+          </div>
+        </div>
+        <div id="startScreen">
+            <img style="width:200px" src="./assets/images/logo.jpg" alt="Logo Arena Magnobot">
+            <audio id="audioStart">
+                <source src="./assets/sounds/start.ogg" type="audio/ogg">
+                <source src="./assets/sounds/start.mp3" type="audio/mpeg">
+            </audio>
+            <audio id="audioBg" loop>
+                <source src="./assets/sounds/bg.ogg" type="audio/ogg">
+                <source src="./assets/sounds/bg.mp3" type="audio/mpeg">
+            </audio>
+            <audio id="audioPoint">
+                <source src="./assets/sounds/point.ogg" type="audio/ogg">
+                <source src="./assets/sounds/point.mp3" type="audio/mpeg">
+            </audio>
+            <audio id="audioPower">
+                <source src="./assets/sounds/power.ogg" type="audio/ogg">
+                <source src="./assets/sounds/power.mp3" type="audio/mpeg">
+            </audio>
+            <audio id="audioGameover">
+                <source src="./assets/sounds/gameover.ogg" type="audio/ogg">
+                <source src="./assets/sounds/gameover.mp3" type="audio/mpeg">
+            </audio>
+            <audio id="audioGhost">
+                <source src="./assets/sounds/ghost.ogg" type="audio/ogg">
+                <source src="./assets/sounds/ghost.mp3" type="audio/mpeg">
+            </audio>
+            <audio id="audioActivate">
+                <source src="./assets/sounds/activate.ogg" type="audio/ogg">
+                <source src="./assets/sounds/activate.mp3" type="audio/mpeg">
+            </audio>
+            <audio id="audioFinal">
+                <source src="./assets/sounds/final.ogg" type="audio/ogg">
+                <source src="./assets/sounds/final.mp3" type="audio/mpeg">
+            </audio>
+            <div id="langSelect">
+                <button class="flag-btn" onclick="setLanguage('en')">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" x="0" y="0" viewBox="0 0 1000 1000" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                        <g>
+                            <clipPath id="a">
+                                <circle cx="500" cy="500" r="500" fill="#000000" opacity="1" data-original="#000000"></circle>
+                            </clipPath>
+                            <path fill="#ffffff" d="M-550.649 0h2744.442v1000H-550.649z" clip-path="url(#a)" opacity="1" data-original="#ffffff" class=""></path>
+                            <path fill="#b22234" d="M-550.649 0h2744.442v111.111H-550.649zM-550.649 222.222h2744.442v111.112H-550.649zM-550.649 444.444h2744.442v111.113H-550.649zM-550.649 666.667h2744.442v111.111H-550.649zM-550.649 888.889h2744.442V1000H-550.649z" clip-path="url(#a)" opacity="1" data-original="#b22234" class=""></path>
+                            <path fill="#3c3b6e" d="M-550.649 0H547.126v555.557H-550.649z" clip-path="url(#a)" opacity="1" data-original="#3c3b6e"></path>
+                            <g fill="#fff">
+                                <path d="m362.243 44.172-9.989 30.754h-32.331l26.153 18.998-9.984 30.74 26.151-18.998 26.15 18.998-9.986-30.743 26.141-18.995h-32.317zM271.236 122.178l-9.986 30.741h-32.322l26.152 18.999-9.994 30.741 26.154-19 26.147 19-9.987-30.741 26.153-18.999h-32.33zM453.233 122.178l-9.986 30.741h-32.319l26.15 18.998-9.995 30.742 26.155-19 26.146 19-9.986-30.739 26.155-19.001h-32.324zM-365.758 244.668l-.003-.002.002-.003.002.005zM-183.76 244.668h-.001l.003-.005v.003zM180.243 200.173l-9.987 30.741h-32.33l26.155 19-9.988 30.75 26.146-18.999 26.153 18.999-9.996-30.75 26.154-19h-32.322zm-.006 44.495h-.001l.003-.005.001.003zM362.243 200.173l-9.987 30.741h-32.333l26.157 19.001-9.988 30.749 26.15-18.997 26.15 18.997-9.99-30.752 26.145-18.998h-32.318zm0 44.495-.003-.002.002-.003.003.005zM89.236 278.181l-9.985 30.738h-32.32l26.143 18.997-9.988 30.743 26.15-18.999 26.15 18.999-9.986-30.739 26.155-19.001H99.223zM271.236 278.181l-9.986 30.738h-32.322l26.153 18.999-9.995 30.741 26.154-19.001 26.147 19.001-9.987-30.741 26.153-18.999h-32.33zM453.233 278.181l-9.986 30.738h-32.319l26.15 18.997-9.995 30.743 26.155-19.001 26.146 19.001-9.987-30.739 26.156-19.001h-32.324zM190.229 386.915l-9.986-30.739-9.987 30.739h-32.33l26.153 19-9.987 30.737 26.147-18.999 26.153 18.999-9.993-30.738 26.151-18.999zM372.229 386.915l-9.986-30.739-9.987 30.739h-32.333l26.156 19.002-9.987 30.735 26.151-18.996 26.15 18.996-9.987-30.74 26.142-18.997zM99.223 464.92l-9.987-30.738-9.986 30.738H46.931l26.142 18.999-9.987 30.741 26.15-18.999 26.15 18.999-9.986-30.737 26.155-19.003zM281.223 464.92l-9.987-30.738-9.986 30.738h-32.322l26.153 19.001-9.995 30.739 26.154-19.001 26.147 19.001-9.987-30.739 26.153-19.001zM463.229 464.92l-9.996-30.738-9.986 30.738h-32.319l26.15 18.999-9.995 30.741 26.155-19.001 26.146 19.001-9.987-30.737 26.156-19.003z" clip-path="url(#a)" fill="#ffffff" opacity="1" data-original="#ffffff" class=""></path>
+                            </g>
+                        </g>
+                    </svg>
+                </button>
+                <button class="flag-btn" onclick="setLanguage('pt')">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                        <g>
+                            <circle cx="256" cy="256" r="256" fill="#6da544" opacity="1" data-original="#6da544" class=""></circle>
+                            <path fill="#ffda44" d="M256 100.174 467.478 256 256 411.826 44.522 256z" opacity="1" data-original="#ffda44" class=""></path>
+                            <circle cx="256" cy="256" r="89.043" fill="#f0f0f0" opacity="1" data-original="#f0f0f0"></circle>
+                            <g fill="#0052b4">
+                                <path d="M211.478 250.435c-15.484 0-30.427 2.355-44.493 6.725.623 48.64 40.227 87.884 89.015 87.884 30.168 0 56.812-15.017 72.919-37.968-27.557-34.497-69.958-56.641-117.441-56.641zM343.393 273.06a89.45 89.45 0 0 0 1.651-17.06c0-49.178-39.866-89.043-89.043-89.043-36.694 0-68.194 22.201-81.826 53.899a183.693 183.693 0 0 1 37.305-3.812c51.717-.001 98.503 21.497 131.913 56.016z" fill="#0052b4" opacity="1" data-original="#0052b4" class=""></path>
+                            </g>
+                        </g>
+                    </svg>
+                </button>
+                <button class="flag-btn" onclick="setLanguage('zh')">
+                    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" height="100%" x="0" y="0" viewBox="0 0 36 36" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><path fill="#d80027" d="M18 36c9.941 0 18-8.059 18-18S27.941 0 18 0 0 8.059 0 18s8.059 18 18 18z" opacity="1" data-original="#d80027" class=""></path><path fill="#ffda44" fill-rule="evenodd" d="m21.25 9.957.14-1.877-.001-.009-1.216 1.44-1.75-.7.998 1.596-1.216 1.44 1.835-.45.99 1.603.135-1.893 1.835-.45zM9.851 10.958l-.001-.003h.002zm0 0 1.553 4.777h5.027l-4.064 2.96 1.554 4.78-4.07-2.953-4.07 2.953 1.56-4.78-4.07-2.96h5.027zm15.313 7.914.612 1.786 1.884-.02-1.512 1.125.605 1.786-1.54-1.1-1.512 1.132.563-1.8-1.54-1.1 1.884-.028.555-1.8zm-4.092 4.078-1.026 1.581-1.82-.485 1.188 1.47-1.02 1.582 1.758-.682 1.188 1.463-.105-1.884L23 25.32l-1.83-.486-.098-1.883.001-.002zm2.798-10.175 1.35 1.315 1.666-.88-.83 1.695 1.35 1.315-1.863-.267-.83 1.688-.323-1.856-1.87-.267 1.673-.88z" clip-rule="evenodd" opacity="1" data-original="#ffda44"></path></g></svg>
+                </button>
+            </div>
+            <div id="instructions"></div>
+        </div>
+        <div id="countdown">
+            <div id="countdownText">3</div>
+        </div>
+        <div id="gameOverScreen">
+            <h2 id="gameOverTitle">Game Over</h2>
+            <button id="restartButton" onclick="restartGame()">Jogar Novamente</button>
+            <div id="homeButton" onclick="location.reload()">
+                <svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="40" height="40" x="0" y="0" viewBox="0 0 24 24" style="enable-background:new 0 0 512 512" xml:space="preserve" class="">
+                    <g>
+                        <path fill="#fff" fill-rule="evenodd" d="m20.479 7.578-5.386-4.453a4.814 4.814 0 0 0-6.186 0L3.521 7.578C2.551 8.381 2 9.597 2 10.866v6.945C2 20.066 3.734 22 6 22h2a2 2 0 0 0 2-2v-3.252c0-1.268.952-2.19 2-2.19s2 .922 2 2.19V20a2 2 0 0 0 2 2h2c2.266 0 4-1.934 4-4.19v-6.944c0-1.269-.55-2.485-1.521-3.288z" clip-rule="evenodd" opacity="1" data-original="#fff" class=""></path>
+                    </g>
+                </svg>
+            </div>
+        </div>
+        <div id="aboutModal">
+            <h1 id="aboutTitle">Sobre este game</h1>
+            <div id="aboutContent">
+            <p><strong>Arena Magnobot</strong> é um web game feito especialmente para o <a href="https://dev.to/devteam/join-us-for-the-alibaba-cloud-web-game-challenge-3000-in-prizes-1n5d" target="_blank">Alibaba Cloud Web Game Challenge</a> no site <a href="https://dev.to" target="_blank" rel="nofollow">https://dev.to</a>.</p>
+            <p>Arena Magnobot é um jogo retrô onde você controla um robô magnético em uma arena futurista de alta demanda. Sua missão: coletar produtos com precisão e velocidade para abastecer a maior central de entregas da galáxia.</p>
+            <p>A cada caixa coletada, o desafio aumenta — exigindo reflexos rápidos e decisões certeiras. Mas fique esperto: alguns produtos estão danificados e podem colocar tudo a perder. Evite itens quebrados ou defeituosos para não comprometer sua missão!</p>
+            <p>Busque os bônus especiais como calçados, blusas e acessórios raros para turbinar sua pontuação e conquistar o título de robô mais eficiente do universo!</p>
+            <p><strong>Crédito de som:</strong> That Game Arcade Medium — disponível em <a href="https://pixabay.com/music/video-games-that-game-arcade-medium-236110/" target="_blank" rel="nofollow">Pixabay</a></p>
+        </div>
+            <button id="closeAboutBtn" onclick="document.getElementById('aboutModal').style.display='none'">Fechar</button>
+        </div>
+        <div id="gameWrapper">
+            <div class="center-game">
+                <div id="powerupLeft" class="powerup-column">
+                    <img class="power-icon" src="./assets/images/power-up-1.jpg" data-index="1" style="filter: grayscale(100%) !important; opacity: 0.4 !important;">
+                    <img class="power-icon" src="./assets/images/power-up-2.jpg" data-index="2" style="filter: grayscale(100%) !important; opacity: 0.4 !important;">
+                    <img class="power-icon" src="./assets/images/power-up-3.jpg" data-index="3" style="filter: grayscale(100%) !important; opacity: 0.4 !important;">
+                    <img class="power-icon" src="./assets/images/power-up-4.jpg" data-index="4" style="filter: grayscale(100%) !important; opacity: 0.4 !important;">
+                    <img class="power-icon" src="./assets/images/power-up-5.jpg" data-index="5" style="filter: grayscale(100%) !important; opacity: 0.4 !important;">
+                </div>
+                <div class="corner-flag" id="flag-tl">
+                    <svg width="62" height="62" viewBox="0 0 281.39407 250.65009" xmlns="http://www.w3.org/2000/svg">
+                        <g id="layer2-flag-1" style="display:inline">
+                            <g id="layer1-flag-1">
+                                <path
+                                    d="m 63.336312,71.691314 c 0.657874,0.516957 1.313808,1.019644 1.967858,1.50837 0.703219,0.525466 1.40426,1.034792 2.103196,1.528361 26.43933,18.670713 49.865554,14.793317 74.144764,9.059598 29.00007,-6.848587 59.21709,-16.345568 97.23924,6.769806 -45.13915,-9.123362 -62.64783,29.422791 -93.92824,50.721071 -18.25376,12.42866 -41.19726,18.98383 -77.057915,6.76518 -0.745319,-0.25394 -1.496217,-0.516 -2.252768,-0.78629 -0.821847,-0.29361 -1.650366,-0.59693 -2.485651,-0.9101 z"
+                                    id="flag"
+                                    style="fill:#ea3e3e;fill-opacity:1;stroke:none;display:inline">
+                                    <animate
+                                        attributeName="d"
+                                        attributeType="auto"
+                                        dur="1s"
+                                        begin="0s"
+                                        calcMode="spline"
+                                        keyTimes="0;0.45;1"
+                                        keySplines="0.05 0 0.95 1; 0.05 0 0.95 1"
+                                        repeatCount="indefinite"
+                                        values="
+                                        m 63.336312,71.691314 c 0.657874,0.516957 1.313808,1.019644 1.967858,1.50837 0.703219,0.525466 1.40426,1.034792 2.103196,1.528361 26.43933,18.670713 49.865554,14.793317 74.144764,9.059598 29.00007,-6.848587 59.21709,-16.345568 97.23924,6.769806 -45.13915,-9.123362 -62.64783,29.422791 -93.92824,50.721071 -18.25376,12.42866 -41.19726,18.98383 -77.057915,6.76518 -0.745319,-0.25394 -1.496217,-0.516 -2.252768,-0.78629 -0.821847,-0.29361 -1.650366,-0.59693 -2.485651,-0.9101 z;
+                                        m 63.336312,71.691314 c 0.659866,-0.117195 1.31518,-0.23111 1.965989,-0.341782 35.868039,-6.099477 58.054249,-2.347781 74.692589,5.207181 28.76555,13.061556 41.01008,50.467247 78.20427,43.150867 1.88702,-0.3712 3.82051,-0.81132 5.80443,-1.32596 -1.25386,1.41625 -2.4928,2.77815 -3.71749,4.08799 -27.3116,29.21061 -55.84873,15.6355 -76.52492,12.17591 -20.55607,-3.43948 -41.51945,-7.24243 -77.781612,10.26588 -0.960107,0.46356 -1.930939,0.94206 -2.912772,1.43591 z;
+                                        m 63.336312,71.691314 c 27.630309,21.711854 51.837238,18.253668 76.877978,12.410458 28.75963,-6.711002 58.61912,-16.568046 96.02807,4.947797 0.48339,0.278028 0.96805,0.561294 1.45399,0.849874 0.36429,0.216339 0.72929,0.435664 1.09502,0.658006 -0.44532,-0.09001 -0.88796,-0.175375 -1.32795,-0.256166 -0.4257,-0.07817 -0.84893,-0.152052 -1.26972,-0.221707 -42.82316,-7.088795 -60.3299,29.618914 -90.4756,50.610194 -19.17784,13.35405 -43.47084,20.34745 -82.651304,5.65754 z
+                                        "
+                                        id="animate2988-flag-1" />
+                                </path>
+                                <path
+                                    d="m 70.090849,244.00901 -3.61268,-178.010239 -6.5029,-0.33241 0.36127,179.187859 z"
+                                    id="pole"
+                                    style="fill:#543c24;fill-opacity:1;stroke:none;display:inline" />
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+                <div class="corner-flag" id="flag-tr">
+                    <svg width="62" height="62" viewBox="0 0 281.39407 250.65009" xmlns="http://www.w3.org/2000/svg">
+                        <g id="layer2-flag-2" style="display:inline">
+                            <g id="layer1-flag-2">
+                                <path
+                                    d="m 63.336312,71.691314 c 0.657874,0.516957 1.313808,1.019644 1.967858,1.50837 0.703219,0.525466 1.40426,1.034792 2.103196,1.528361 26.43933,18.670713 49.865554,14.793317 74.144764,9.059598 29.00007,-6.848587 59.21709,-16.345568 97.23924,6.769806 -45.13915,-9.123362 -62.64783,29.422791 -93.92824,50.721071 -18.25376,12.42866 -41.19726,18.98383 -77.057915,6.76518 -0.745319,-0.25394 -1.496217,-0.516 -2.252768,-0.78629 -0.821847,-0.29361 -1.650366,-0.59693 -2.485651,-0.9101 z"
+                                    id="flag"
+                                    style="fill:#ea3e3e;fill-opacity:1;stroke:none;display:inline">
+                                    <animate
+                                        attributeName="d"
+                                        attributeType="auto"
+                                        dur="1s"
+                                        begin="0s"
+                                        calcMode="spline"
+                                        keyTimes="0;0.45;1"
+                                        keySplines="0.05 0 0.95 1; 0.05 0 0.95 1"
+                                        repeatCount="indefinite"
+                                        values="
+                                        m 63.336312,71.691314 c 0.657874,0.516957 1.313808,1.019644 1.967858,1.50837 0.703219,0.525466 1.40426,1.034792 2.103196,1.528361 26.43933,18.670713 49.865554,14.793317 74.144764,9.059598 29.00007,-6.848587 59.21709,-16.345568 97.23924,6.769806 -45.13915,-9.123362 -62.64783,29.422791 -93.92824,50.721071 -18.25376,12.42866 -41.19726,18.98383 -77.057915,6.76518 -0.745319,-0.25394 -1.496217,-0.516 -2.252768,-0.78629 -0.821847,-0.29361 -1.650366,-0.59693 -2.485651,-0.9101 z;
+                                        m 63.336312,71.691314 c 0.659866,-0.117195 1.31518,-0.23111 1.965989,-0.341782 35.868039,-6.099477 58.054249,-2.347781 74.692589,5.207181 28.76555,13.061556 41.01008,50.467247 78.20427,43.150867 1.88702,-0.3712 3.82051,-0.81132 5.80443,-1.32596 -1.25386,1.41625 -2.4928,2.77815 -3.71749,4.08799 -27.3116,29.21061 -55.84873,15.6355 -76.52492,12.17591 -20.55607,-3.43948 -41.51945,-7.24243 -77.781612,10.26588 -0.960107,0.46356 -1.930939,0.94206 -2.912772,1.43591 z;
+                                        m 63.336312,71.691314 c 27.630309,21.711854 51.837238,18.253668 76.877978,12.410458 28.75963,-6.711002 58.61912,-16.568046 96.02807,4.947797 0.48339,0.278028 0.96805,0.561294 1.45399,0.849874 0.36429,0.216339 0.72929,0.435664 1.09502,0.658006 -0.44532,-0.09001 -0.88796,-0.175375 -1.32795,-0.256166 -0.4257,-0.07817 -0.84893,-0.152052 -1.26972,-0.221707 -42.82316,-7.088795 -60.3299,29.618914 -90.4756,50.610194 -19.17784,13.35405 -43.47084,20.34745 -82.651304,5.65754 z
+                                        "
+                                        id="animate2988-flag-2" />
+                                </path>
+                                <path
+                                    d="m 70.090849,244.00901 -3.61268,-178.010239 -6.5029,-0.33241 0.36127,179.187859 z"
+                                    id="pole"
+                                    style="fill:#543c24;fill-opacity:1;stroke:none;display:inline" />
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+                <div class="corner-flag" id="flag-bl">
+                    <svg width="62" height="62" viewBox="0 0 281.39407 250.65009" xmlns="http://www.w3.org/2000/svg">
+                        <g id="layer2-flag-3" style="display:inline">
+                            <g id="layer1-flag-3">
+                                <path
+                                    d="m 63.336312,71.691314 c 0.657874,0.516957 1.313808,1.019644 1.967858,1.50837 0.703219,0.525466 1.40426,1.034792 2.103196,1.528361 26.43933,18.670713 49.865554,14.793317 74.144764,9.059598 29.00007,-6.848587 59.21709,-16.345568 97.23924,6.769806 -45.13915,-9.123362 -62.64783,29.422791 -93.92824,50.721071 -18.25376,12.42866 -41.19726,18.98383 -77.057915,6.76518 -0.745319,-0.25394 -1.496217,-0.516 -2.252768,-0.78629 -0.821847,-0.29361 -1.650366,-0.59693 -2.485651,-0.9101 z"
+                                    id="flag"
+                                    style="fill:#ea3e3e;fill-opacity:1;stroke:none;display:inline">
+                                    <animate
+                                        attributeName="d"
+                                        attributeType="auto"
+                                        dur="1s"
+                                        begin="0s"
+                                        calcMode="spline"
+                                        keyTimes="0;0.45;1"
+                                        keySplines="0.05 0 0.95 1; 0.05 0 0.95 1"
+                                        repeatCount="indefinite"
+                                        values="
+                                        m 63.336312,71.691314 c 0.657874,0.516957 1.313808,1.019644 1.967858,1.50837 0.703219,0.525466 1.40426,1.034792 2.103196,1.528361 26.43933,18.670713 49.865554,14.793317 74.144764,9.059598 29.00007,-6.848587 59.21709,-16.345568 97.23924,6.769806 -45.13915,-9.123362 -62.64783,29.422791 -93.92824,50.721071 -18.25376,12.42866 -41.19726,18.98383 -77.057915,6.76518 -0.745319,-0.25394 -1.496217,-0.516 -2.252768,-0.78629 -0.821847,-0.29361 -1.650366,-0.59693 -2.485651,-0.9101 z;
+                                        m 63.336312,71.691314 c 0.659866,-0.117195 1.31518,-0.23111 1.965989,-0.341782 35.868039,-6.099477 58.054249,-2.347781 74.692589,5.207181 28.76555,13.061556 41.01008,50.467247 78.20427,43.150867 1.88702,-0.3712 3.82051,-0.81132 5.80443,-1.32596 -1.25386,1.41625 -2.4928,2.77815 -3.71749,4.08799 -27.3116,29.21061 -55.84873,15.6355 -76.52492,12.17591 -20.55607,-3.43948 -41.51945,-7.24243 -77.781612,10.26588 -0.960107,0.46356 -1.930939,0.94206 -2.912772,1.43591 z;
+                                        m 63.336312,71.691314 c 27.630309,21.711854 51.837238,18.253668 76.877978,12.410458 28.75963,-6.711002 58.61912,-16.568046 96.02807,4.947797 0.48339,0.278028 0.96805,0.561294 1.45399,0.849874 0.36429,0.216339 0.72929,0.435664 1.09502,0.658006 -0.44532,-0.09001 -0.88796,-0.175375 -1.32795,-0.256166 -0.4257,-0.07817 -0.84893,-0.152052 -1.26972,-0.221707 -42.82316,-7.088795 -60.3299,29.618914 -90.4756,50.610194 -19.17784,13.35405 -43.47084,20.34745 -82.651304,5.65754 z
+                                        "
+                                        id="animate2988-flag-3" />
+                                </path>
+                                <path
+                                    d="m 70.090849,244.00901 -3.61268,-178.010239 -6.5029,-0.33241 0.36127,179.187859 z"
+                                    id="pole"
+                                    style="fill:#543c24;fill-opacity:1;stroke:none;display:inline" />
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+                <div class="corner-flag" id="flag-br">
+                    <svg width="62" height="62" viewBox="0 0 281.39407 250.65009" xmlns="http://www.w3.org/2000/svg">
+                        <g id="layer2-flag-4" style="display:inline">
+                            <g id="layer1-flag-4">
+                                <path
+                                    d="m 63.336312,71.691314 c 0.657874,0.516957 1.313808,1.019644 1.967858,1.50837 0.703219,0.525466 1.40426,1.034792 2.103196,1.528361 26.43933,18.670713 49.865554,14.793317 74.144764,9.059598 29.00007,-6.848587 59.21709,-16.345568 97.23924,6.769806 -45.13915,-9.123362 -62.64783,29.422791 -93.92824,50.721071 -18.25376,12.42866 -41.19726,18.98383 -77.057915,6.76518 -0.745319,-0.25394 -1.496217,-0.516 -2.252768,-0.78629 -0.821847,-0.29361 -1.650366,-0.59693 -2.485651,-0.9101 z"
+                                    id="flag"
+                                    style="fill:#ea3e3e;fill-opacity:1;stroke:none;display:inline">
+                                    <animate
+                                        attributeName="d"
+                                        attributeType="auto"
+                                        dur="1s"
+                                        begin="0s"
+                                        calcMode="spline"
+                                        keyTimes="0;0.45;1"
+                                        keySplines="0.05 0 0.95 1; 0.05 0 0.95 1"
+                                        repeatCount="indefinite"
+                                        values="
+                                        m 63.336312,71.691314 c 0.657874,0.516957 1.313808,1.019644 1.967858,1.50837 0.703219,0.525466 1.40426,1.034792 2.103196,1.528361 26.43933,18.670713 49.865554,14.793317 74.144764,9.059598 29.00007,-6.848587 59.21709,-16.345568 97.23924,6.769806 -45.13915,-9.123362 -62.64783,29.422791 -93.92824,50.721071 -18.25376,12.42866 -41.19726,18.98383 -77.057915,6.76518 -0.745319,-0.25394 -1.496217,-0.516 -2.252768,-0.78629 -0.821847,-0.29361 -1.650366,-0.59693 -2.485651,-0.9101 z;
+                                        m 63.336312,71.691314 c 0.659866,-0.117195 1.31518,-0.23111 1.965989,-0.341782 35.868039,-6.099477 58.054249,-2.347781 74.692589,5.207181 28.76555,13.061556 41.01008,50.467247 78.20427,43.150867 1.88702,-0.3712 3.82051,-0.81132 5.80443,-1.32596 -1.25386,1.41625 -2.4928,2.77815 -3.71749,4.08799 -27.3116,29.21061 -55.84873,15.6355 -76.52492,12.17591 -20.55607,-3.43948 -41.51945,-7.24243 -77.781612,10.26588 -0.960107,0.46356 -1.930939,0.94206 -2.912772,1.43591 z;
+                                        m 63.336312,71.691314 c 27.630309,21.711854 51.837238,18.253668 76.877978,12.410458 28.75963,-6.711002 58.61912,-16.568046 96.02807,4.947797 0.48339,0.278028 0.96805,0.561294 1.45399,0.849874 0.36429,0.216339 0.72929,0.435664 1.09502,0.658006 -0.44532,-0.09001 -0.88796,-0.175375 -1.32795,-0.256166 -0.4257,-0.07817 -0.84893,-0.152052 -1.26972,-0.221707 -42.82316,-7.088795 -60.3299,29.618914 -90.4756,50.610194 -19.17784,13.35405 -43.47084,20.34745 -82.651304,5.65754 z
+                                        "
+                                        id="animate2988-flag-4" />
+                                </path>
+                                <path
+                                    d="m 70.090849,244.00901 -3.61268,-178.010239 -6.5029,-0.33241 0.36127,179.187859 z"
+                                    id="pole"
+                                    style="fill:#543c24;fill-opacity:1;stroke:none;display:inline" />
+                            </g>
+                        </g>
+                    </svg>
+                </div>
+                <canvas id="gameCanvas"></canvas>
+                <div id="powerupRight" class="powerup-column">
+                    <img class="power-icon" src="./assets/images/power-up-6.jpg" data-index="6" style="filter: grayscale(100%) !important; opacity: 0.4 !important;">
+                    <img class="power-icon" src="./assets/images/power-up-7.jpg" data-index="7" style="filter: grayscale(100%) !important; opacity: 0.4 !important;">
+                    <img class="power-icon" src="./assets/images/power-up-8.jpg" data-index="8" style="filter: grayscale(100%) !important; opacity: 0.4 !important;">
+                    <img class="power-icon" src="./assets/images/power-up-9.jpg" data-index="9" style="filter: grayscale(100%) !important; opacity: 0.4 !important;">
+                    <img class="power-icon" src="./assets/images/power-up-10.jpg" data-index="10" style="filter: grayscale(100%) !important; opacity: 0.4 !important;">
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <div id="installBtn" class="game-pwa" style="display: none;">
+            Instalar o jogo |
+            </div>
+            <a id="aboutLink" onclick="document.getElementById('aboutModal').style.display='flex'">Sobre este game</a>
+        </div>
+        <script>
+            let enableTutorialRotation = false;
+        </script>
+        <script src="./assets/js/constants.js"></script>
+        <script src="./assets/js/sound.js"></script>
+        <script src="./assets/js/i18n.js"></script>
+        <script src="./assets/js/preload.js"></script> 
+        <script src="./assets/js/game-state.js"></script>
+        <script src="./assets/js/generators.js"></script>
+        <script src="./assets/js/game-init.js"></script>
+        <script src="./assets/js/game-render.js"></script>
+        <script src="./assets/js/game-logic.js"></script>
+        <script src="./assets/js/input.js"></script>
+        <script src="./assets/js/tutorial-rotate.js"></script>
+        <script src="./assets/js/language-select.js"></script>
+        <script src="./assets/js/main.js"></script>
+        <script>
+          let deferredPrompt;
+
+          const installBtn = document.getElementById('installBtn');
+
+          // Escuta o evento que o navegador dispara quando o app é "instalável"
+          window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault(); // impede o popup automático
+            deferredPrompt = e;
+            installBtn.style.display = 'block'; // mostra o botão
+          });
+
+          // Quando o usuário clicar no botão
+          installBtn.addEventListener('click', () => {
+            if (!deferredPrompt) return;
+
+            deferredPrompt.prompt(); // mostra o popup do navegador
+            deferredPrompt.userChoice.then((choiceResult) => {
+              if (choiceResult.outcome === 'accepted') {
+                console.log('Usuário aceitou instalar o app');
+              } else {
+                console.log('Usuário recusou a instalação');
+              }
+              deferredPrompt = null; // limpa a referência
+              installBtn.style.display = 'none'; // oculta o botão após interação
+            });
+          });
+        </script>
+
+    </body>
 </html>

@@ -1,0 +1,582 @@
+#ui-container {
+  position: absolute;
+  top: 30px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  padding: 0 20px;
+  margin-top: 10px;
+  gap: 15px;
+}
+
+#ui-container #ui {
+
+    position: relative;
+    top: 0;
+}
+
+#ui-container #soundToggle {
+
+    position: relative;
+    margin: 0;
+    right: 0;
+    top: 0;
+}
+
+#ui {
+  color: white;
+  font-size: 18px;
+}
+
+#soundToggle {
+  background: #e27630;
+  border: none;
+  color: white;
+  font-size: 14px;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 10px;
+}
+
+.skeleton {
+  width: 100%;
+  height: 220px; /* ajuste conforme seu layout */
+  background-color: #e0e0e0;
+  background-image: linear-gradient(
+    90deg,
+    #e0e0e0 0%,
+    #f8f8f8 50%,
+    #e0e0e0 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.2s ease-in-out infinite;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.loading-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: #121212;
+  font-family: sans-serif;
+  opacity: 0.8;
+  z-index: 2;
+}
+
+#rotateWarning {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #1c1425;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.5;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/* Responsividade no mobile */
+@media (max-width: 768px) {
+    #ui-container #ui {
+        font-size: 12px;
+        text-align: left;
+        background-color: #000000c7;
+        padding: 8.5px;
+        border-radius: 5px;
+    }
+    #ui-container {
+        justify-content: space-between;
+    }
+}
+
+#tutorialModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#tutorialContent {
+  background: #1c1425;
+  padding: 20px;
+  text-align: center;
+  color: white;
+  max-width: 80%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tutorial-caption {
+
+    font-size: 12px;
+}
+
+#tutorialImage {
+  transition: transform 0.6s ease-in-out;
+}
+
+#tutorial-caption {
+
+    font-size: 11px;
+}
+
+#tutorialContent img {
+  max-width: 200px;
+  margin-bottom: 15px;
+  margin: 0 auto;
+}
+
+#closeTutorialBtn {
+    padding: 10px 20px;
+    background: #e27630;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 80%;
+    margin: 0 auto;
+}
+
+
+/* ---------- BASE ---------- */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: sans-serif;
+    background-size: cover;
+}
+
+@media (min-width: 601px) {
+
+    html, body {
+
+        background: #000000 url("./../../assets/images/arena.webp") no-repeat center center fixed;
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    html, body {
+
+        background: #000000 url("./../../assets/images/arena-mobile.webp") no-repeat center center fixed;
+    }
+
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    border: 4px solid #e27630;
+}
+
+/* ---------- UI & POSIÇÃO ---------- */
+#ui {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    z-index: 10;
+}
+
+#soundToggle {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    z-index: 20;
+    background: #e27630;
+    border: none;
+    color: white;
+    font-size: 14px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* ---------- TELAS SOBREPOSTAS ---------- */
+#startScreen,
+#gameOverScreen,
+#countdown {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    z-index: 10;
+}
+
+#startScreen img {
+
+    border-radius: 10px;
+}
+
+#gameOverScreen,
+#countdown,
+#aboutModal {
+    display: none;
+}
+
+#aboutModal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.90);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    padding: 0 40px;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+/* ---------- TEXTO ---------- */
+h1 {
+    margin: 10px 0 0 0;
+    font-size: 25px;
+    text-transform: uppercase;
+    text-align: center;
+    color: #FB8C00;
+}
+
+#instructions {
+    font-size: 13px;
+    margin-top: 10px;
+    color: #aaa;
+    width: 200px;
+    text-align: center;
+}
+
+#aboutModal p {
+    max-width: 600px;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+#aboutContent {
+
+    height: 40vh;
+    overflow: auto;
+    padding-right: 10px;
+}
+
+#aboutContent a {
+
+    color: #FB8C00;
+}
+
+#aboutContent::-webkit-scrollbar {
+    width: 10px;
+}
+
+#aboutContent::-webkit-scrollbar-track {
+    background: #eee;
+    border-radius: 10px;
+}
+
+#aboutContent::-webkit-scrollbar-thumb {
+    background: #FB8C00;
+    border-radius: 10px;
+    border: 2px solid #eee;
+}
+
+/* ---------- BOTÕES ---------- */
+button {
+    position: relative;
+    display: inline-block;
+    margin-top: 20px;
+    font-size: 14px;
+    padding: 10px 25px;
+    border: 2px solid #e27630;
+    color: #fff;
+    background: transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: 0.3s;
+    z-index: 1;
+}
+
+#gameOverTitle {
+
+    margin: 0;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: conic-gradient(from 0deg, #ff6600, #ffae42, #ff6600, #e27630, #ffae42, #ff6600);
+    animation: rotateBorder 3s linear infinite;
+    z-index: -2;
+}
+
+button::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    background: #1c1425;
+    border-radius: 8px;
+    z-index: -1;
+}
+
+button:hover {
+    color: #ffae42;
+    transform: scale(1.05);
+    border-color: #ffae42;
+}
+
+/* ---------- LAYOUT EXTRA ---------- */
+#gameWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    flex-wrap: nowrap;
+    position: relative;
+    height: 100vh;
+
+}
+
+.center-game {
+
+    display: flex;
+    gap: 10px;
+    position: relative;
+}
+
+.powerup-column {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    justify-content: center;
+}
+
+#footer {
+    position: absolute;
+    bottom: 35px;
+    width: 100%;
+    text-align: center;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    color: #fff;
+}
+
+#footer a {
+    color: #e27630;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#footer .game-pwa {
+
+    display: block;
+    position: relative;
+    z-index: 2222;
+    color: #ff9800;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+#homeButton {
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/* ---------- BANDEIRAS ---------- */
+#aboutModal #langSelect,
+#langSelect {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    height: 80px;
+    position: relative;
+    z-index: 0;
+}
+
+.flag-btn {
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+.flag-btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.flag-btn svg {
+    width: 30px;
+}
+
+.flag-btn.selected-lang {
+    color: white !important;
+    background-color: #fff;
+}
+
+.flag-btn.selected-lang::before {
+    opacity: 0 !important;
+    animation: none !important;
+    background: conic-gradient(from 0deg, white, white, white);
+}
+
+/* ---------- FLAGS CANTOS ---------- */
+.corner-flag {
+    position: absolute;
+    width: 62px;
+    height: 62px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+#flag-tl {
+    transform: rotate(-45deg);
+    left: 30px;
+    top: -60px;
+}
+
+#flag-tr {
+    transform: rotate(45deg);
+    right: 10px;
+    top: -40px;
+}
+
+#flag-bl {
+    transform: rotate(-135deg);
+    left: 10px;
+    bottom: -35px;
+}
+
+#flag-br {
+    transform: rotate(135deg);
+    right: 32px;
+    bottom: -60px;
+}
+
+/* ---------- ANIMAÇÕES ---------- */
+#countdownText {
+    font-size: 64px;
+    font-weight: bold;
+    animation: scale 0.3s ease-in-out;
+}
+
+@keyframes scale {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes rotateBorder {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* ---------- RESPONSIVO ---------- */
+@media (max-width: 600px) {
+    #aboutModal {
+        font-size: 16px;
+    }
+
+    #aboutModal p {
+        font-size: 12px;
+    }
+
+    #gameWrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .powerup-column {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 4px;
+        margin-top: 12px;
+    }
+
+    .powerup-column img {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .corner-flag {
+        display: none;
+    }
+}
