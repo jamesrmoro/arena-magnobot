@@ -1,6 +1,6 @@
 # Arena Magnobot
 
-![Game running in browser](https://arena-magnobot.jamesrmoro.me/assets/images/cover-2.jpg)
+![Game running in browser](https://arena-magnobot.jamesrmoro.me/assets/images/cover.jpg)
 
 > A high-speed retro arena game where you control a magnetic robot and dodge dangerous products while collecting power-ups — built entirely with JavaScript and HTML5 Canvas!
 
