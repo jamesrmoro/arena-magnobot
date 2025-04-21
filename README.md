@@ -1,5 +1,7 @@
 # Arena Magnobot
 
+Arena Magnobot is a fast-paced, retro-style online game where you control a magnetic robot in a futuristic arena. Your mission is to dodge dangerous goods, collect valuable product power-ups, and survive as long as possible.
+
 ![Game running in browser](https://arena-magnobot.jamesrmoro.me/assets/images/cover.jpg)
 
 > A high-speed retro arena game where you control a magnetic robot and dodge dangerous products while collecting power-ups — built entirely with JavaScript and HTML5 Canvas!
