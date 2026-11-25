@@ -1,26 +1,47 @@
-document.getElementById("instructions").textContent = isMobile ?
-    translations.pt.instructions :
-    translations.pt.instructionsDesktop;
+/* Inicialização. */
+'use strict';
 
-document.querySelectorAll('.power-icon').forEach(icon => {
-    icon.style.width = tileSize + 'px';
-    icon.style.height = tileSize + 'px';
-});
+(function boot() {
+  I18n.set(I18n.detect());
+  Sound.init();
+  Renderer.init(document.getElementById('gameCanvas'));
+  UI.init();
+  Input.init();
 
-preloadImages(() => {
-    document.getElementById("startScreen").style.display = "flex";
-    highscore = localStorage.getItem("magnobot_highscore") || 0;
-    document.getElementById("highscore").textContent = highscore;
-});
+  Assets.load(p => UI.setProgress(p)).then(() => {
+    UI.hideLoader();
+    UI.show('menu');
+    Game.init();
+    Game.reset();
+    if (Assets.failed.length) {
+      console.warn('[magnobot] imagens que falharam:', Assets.failed);
+    }
+  });
 
-function checkOrientation() {
-    const warning = document.getElementById("rotateWarning");
-    if (!warning) return;
+  // PWA: a versão anterior tinha service-worker.js no projeto mas nunca o
+  // registrava — o jogo não funcionava offline e não era instalável de fato.
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./service-worker.js').catch(() => {});
+    });
+  }
 
-    const isLandscape = window.innerWidth > window.innerHeight;
-    warning.style.display = (isMobile && isLandscape) ? "flex" : "none";
-}
-
-window.addEventListener("resize", checkOrientation);
-window.addEventListener("orientationchange", checkOrientation);
-document.addEventListener("DOMContentLoaded", checkOrientation);
+  // Botão de instalar
+  let deferredPrompt = null;
+  const installBtn = document.getElementById('btnInstall');
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (installBtn) installBtn.hidden = false;
+  });
+  if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      try { await deferredPrompt.userChoice; } catch (_) {}
+      deferredPrompt = null;
+      installBtn.hidden = true;
+    });
+  }
+  window.addEventListener('appinstalled', () => { if (installBtn) installBtn.hidden = true; });
+})();

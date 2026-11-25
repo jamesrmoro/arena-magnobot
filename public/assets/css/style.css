@@ -1,599 +1,416 @@
-#ui-container {
-  position: absolute;
-  top: 0px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  padding: 0 20px;
-  margin-top: 10px;
-  gap: 15px;
+/* Arena Magnobot — folha de estilo
+ * Reescrita: o arquivo antigo tinha #ui e #soundToggle declarados duas vezes
+ * com position diferente, media queries em 600px e 768px disputando o mesmo
+ * elemento, alturas em 100vh (que no celular fica atrás da barra do
+ * navegador) e posições absolutas em px para as bandeiras dos cantos, que
+ * saíam do lugar em qualquer tela diferente. */
+
+:root {
+  --bg: #120d1a;
+  --panel: #1c1425;
+  --panel-2: #241a30;
+  --accent: #fb8c00;
+  --accent-2: #ffae42;
+  --danger: #ea3e3e;
+  --shield: #4fd3ff;
+  --text: #f4f1f7;
+  --muted: #a69eb3;
+  --radius: 14px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
 }
 
-#ui-container #ui {
+* { box-sizing: border-box; }
 
-    position: relative;
-    top: 0;
-}
+/* [hidden] precisa vencer qualquer display declarado depois — era por isso
+   que o selo "Novo recorde" aparecia mesmo com o atributo hidden. */
+[hidden] { display: none !important; }
 
-#ui-container #soundToggle {
-
-    position: relative;
-    margin: 0;
-    right: 0;
-    top: 0;
-}
-
-#ui {
-  color: white;
-  font-size: 18px;
-}
-
-#soundToggle {
-  background: #e27630;
-  border: none;
-  color: white;
-  font-size: 14px;
-  padding: 6px 12px;
-  cursor: pointer;
-  border-radius: 5px;
-  margin-left: 10px;
-}
-
-.skeleton {
-  width: 100%;
-  height: 220px; /* ajuste conforme seu layout */
-  background-color: #e0e0e0;
-  background-image: linear-gradient(
-    90deg,
-    #e0e0e0 0%,
-    #f8f8f8 50%,
-    #e0e0e0 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 1.2s ease-in-out infinite;
-  position: relative;
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
   overflow: hidden;
+  background: #000;
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;            /* mata o pull-to-refresh */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-.loading-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 14px;
-  color: #121212;
-  font-family: sans-serif;
-  opacity: 0.8;
-  z-index: 2;
-}
-
-#rotateWarning {
-    display: none;
-    position: fixed;
-    z-index: 9999;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #1c1425;
-    color: white;
-    font-size: 20px;
-    font-weight: bold;
-    text-align: center;
-    line-height: 1.5;
-    height: 100vh;
-    justify-content: center;
-    align-items: center;
-}
-
-
-
-/* Responsividade no mobile */
-@media (max-width: 768px) {
-    #ui-container #ui {
-        font-size: 12px;
-        text-align: left;
-        background-color: #000000c7;
-        padding: 8.5px;
-        border-radius: 5px;
-    }
-    #ui-container {
-        justify-content: space-between;
-    }
-}
-
-#tutorialModal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-
-#tutorialContent {
-  background: #1c1425;
-  padding: 20px;
-  text-align: center;
-  color: white;
-  max-width: 80%;
+body {
+  /* O fundo do <body> precisa ser transparente: o fundo de um bloco é pintado
+     DEPOIS dos descendentes com z-index negativo, então um body opaco cobria a
+     camada ::before com a arte da arena. */
+  background: transparent;
+  /* 100dvh respeita a barra de endereço no celular; 100vh não. */
+  min-height: 100dvh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  padding: var(--safe-t) 0 var(--safe-b);
 }
 
-.tutorial-caption {
-
-    font-size: 12px;
+/* Arena do designer, em tela cheia. Os refletores precisam aparecer: é a
+   identidade do jogo. Fica numa camada fixa própria para não brigar com o
+   layout nem ser recarregada a cada repaint. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: #000 url("../images/arena-mobile.webp") center center / cover no-repeat;
+  z-index: -2;
+}
+@media (min-width: 760px) {
+  body::before { background-image: url("../images/arena.webp"); }
 }
 
-#tutorialImage {
-  transition: transform 0.6s ease-in-out;
+/* Véu sutil só por baixo do rodapé e do HUD, para o texto continuar legível
+   sobre as partes claras dos refletores, sem apagar a arte. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, rgba(4,10,18,.55) 0%, rgba(4,10,18,0) 18%,
+                    rgba(4,10,18,0) 78%, rgba(4,10,18,.6) 100%);
+  z-index: -1;
+  pointer-events: none;
 }
 
-#tutorial-caption {
+button { font: inherit; color: inherit; cursor: pointer; }
 
-    font-size: 11px;
+/* ---------- CARREGAMENTO ---------- */
+#loader {
+  position: fixed; inset: 0; z-index: 200;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; background: var(--bg); text-align: center;
+  transition: opacity .35s ease, visibility .35s;
+}
+#loader.is-gone { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-logo { font-weight: 800; letter-spacing: .18em; font-size: clamp(16px, 5vw, 26px); }
+.loader-logo span { color: var(--accent); }
+.loader-track { width: min(240px, 60vw); height: 6px; border-radius: 99px; background: #2b2238; overflow: hidden; }
+#loaderBar { height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .18s ease; }
+#loader p { margin: 0; color: var(--muted); font-size: 13px; }
+
+/* ---------- HUD ---------- */
+#hud {
+  flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; padding: 8px 12px; z-index: 20;
+}
+.hud-group { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.hud-chip {
+  display: inline-flex; gap: 6px; align-items: baseline;
+  background: rgba(0,0,0,.45); border: 1px solid rgba(255,255,255,.08);
+  padding: 5px 10px; border-radius: 99px; font-size: 12px; white-space: nowrap;
+}
+.hud-chip b { color: var(--muted); font-weight: 500; }
+.hud-chip strong { font-size: 15px; font-variant-numeric: tabular-nums; }
+.hud-chip--ghost strong { color: var(--accent-2); }
+.hud-badge {
+  padding: 4px 9px; border-radius: 99px; font-size: 12px; font-weight: 700;
+  animation: pop .25s ease-out;
+}
+.hud-badge--combo { background: var(--accent); color: #221400; }
+.hud-badge--shield { background: var(--shield); color: #01202b; }
+.icon-btn {
+  width: 38px; height: 38px; border-radius: 12px; border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.45); font-size: 16px; line-height: 1;
+  display: grid; place-items: center; transition: transform .12s, background .2s;
+}
+.icon-btn:hover { background: rgba(255,255,255,.1); }
+.icon-btn:active { transform: scale(.94); }
+
+/* ---------- TABULEIRO ---------- */
+#stage {
+  flex: 1 1 auto;
+  display: flex; align-items: center; justify-content: center;
+  gap: clamp(10px, 2vw, 28px); min-height: 0;
+  padding: 0 clamp(8px, 2vw, 24px);
+  /* Sem este limite, numa tela larga o tabuleiro empurrava as colunas de
+     produtos para as bordas da janela, onde ficavam cortadas. */
+  width: 100%; max-width: 1040px; margin: 0 auto;
+}
+#boardWrap {
+  flex: 1 1 auto;
+  height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  min-width: 0; min-height: 0;
+  touch-action: none;                   /* o gesto é do jogo, não da página */
+}
+#gameCanvas {
+  display: block;
+  border-radius: 10px;
+  border: 3px solid var(--accent);
+  box-shadow: 0 0 0 1px rgba(0,0,0,.6), 0 0 34px rgba(251,140,0,.28), 0 18px 50px rgba(0,0,0,.7);
+  background: #43543d;
 }
 
-#tutorialContent img {
-  max-width: 200px;
-  margin-bottom: 15px;
-  margin: 0 auto;
+/* Coleção de produtos */
+.collect-col { display: flex; flex-direction: column; gap: 6px; flex: 0 0 auto; }
+.collect-item {
+  width: clamp(26px, 5.2vmin, 44px); height: clamp(26px, 5.2vmin, 44px);
+  border-radius: 8px; object-fit: cover;
+  filter: grayscale(100%); opacity: .35;
+  transition: filter .3s, opacity .3s, transform .3s;
+}
+.collect-item.is-collected { filter: none; opacity: 1; transform: scale(1.06); }
+.collect-item.is-celebrating { animation: celebrate .7s ease forwards; }
+@keyframes celebrate {
+  0% { transform: scale(1.1); }
+  100% { transform: scale(.4) rotate(18deg); opacity: 0; }
 }
 
-#closeTutorialBtn {
-    padding: 10px 20px;
-    background: #e27630;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 80%;
-    margin: 0 auto;
+/* Em tela estreita as colunas viram duas faixas horizontais sob o tabuleiro */
+@media (max-aspect-ratio: 1/1) and (max-width: 760px) {
+  #stage { flex-direction: column; gap: 6px; padding: 0 6px; }
+  #boardWrap { order: 0; flex: 1 1 auto; width: 100%; }
+  .collect-col { flex-direction: row; order: 1; justify-content: center; }
 }
 
-
-/* ---------- BASE ---------- */
-html,
-body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    overflow: hidden;
-    font-family: sans-serif;
-    background-size: cover;
+/* ---------- DIRECIONAL ---------- */
+#dpad { display: none; }
+@media (hover: none), (pointer: coarse) {
+  #dpad {
+    display: grid;
+    grid-template-columns: repeat(3, 44px);
+    grid-template-rows: repeat(3, 44px);
+    justify-content: center; align-content: center;
+    gap: 4px; margin: 6px auto 0; flex: 0 0 auto;
+    opacity: .85;
+  }
+  .dpad-btn {
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(0,0,0,.5); border-radius: 12px;
+    font-size: 13px; color: var(--accent-2);
+    display: grid; place-items: center; touch-action: manipulation;
+  }
+  .dpad-btn:active { background: var(--accent); color: #1c1425; transform: scale(.93); }
+  .dpad-up { grid-area: 1 / 2; }
+  .dpad-left { grid-area: 2 / 1; }
+  .dpad-right { grid-area: 2 / 3; }
+  .dpad-down { grid-area: 3 / 2; }
+}
+/* Em paisagem no celular o direcional atrapalha: fica flutuando no canto */
+@media (hover: none) and (orientation: landscape) {
+  #dpad {
+    position: fixed; right: 10px; bottom: calc(10px + var(--safe-b)); margin: 0;
+    grid-template-columns: repeat(3, 38px); grid-template-rows: repeat(3, 38px);
+    opacity: .7; z-index: 30;
+  }
 }
 
-@media (min-width: 601px) {
+/* ---------- RODAPÉ ---------- */
+#appFooter {
+  flex: 0 0 auto;
+  display: flex; justify-content: center; gap: 16px;
+  padding: 8px 12px 10px;
+}
+.link-btn {
+  background: none; border: 0; padding: 4px 2px;
+  color: var(--accent); font-size: 13px; text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+.link-btn:hover { border-bottom-color: var(--accent); }
 
-    html, body {
+/* ---------- TELAS E MODAIS ---------- */
+.screen, .modal {
+  position: fixed; inset: 0; z-index: 100;
+  display: none; align-items: center; justify-content: center;
+  padding: 16px;
+  background: rgba(10, 6, 16, .72);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.screen.is-open, .modal.is-open { display: flex; }
+.screen--bare { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
 
-        background: #000000 url("./../../assets/images/arena.webp") no-repeat center center fixed;
-    }
+.panel {
+  width: 100%; max-width: 340px;
+  background: linear-gradient(180deg, var(--panel-2), var(--panel));
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 20px;
+  padding: 22px 20px;
+  text-align: center;
+  box-shadow: 0 24px 70px rgba(0,0,0,.6);
+  animation: rise .28s cubic-bezier(.2,.8,.2,1);
+  max-height: 90dvh; overflow: auto;
+}
+.panel--wide { max-width: 480px; text-align: left; }
+.panel h2 { margin: 0 0 14px; font-size: 20px; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
+.panel--wide h2 { text-align: center; }
 
+.logo {
+  margin: 0; font-size: clamp(22px, 7vw, 32px); line-height: 1.05;
+  font-weight: 800; letter-spacing: .1em;
+}
+.logo span { display: block; color: var(--accent); }
+.tagline { color: var(--muted); font-size: 13px; margin: 8px 0 20px; }
+.hint { color: var(--muted); font-size: 12px; margin: 12px 0 0; }
+.hint--touch, .help-txt--touch { display: none; }
+@media (hover: none), (pointer: coarse) {
+  .hint--desktop, .help-txt--desktop { display: none; }
+  .hint--touch, .help-txt--touch { display: inline; }
 }
 
-@media (max-width: 600px) {
-
-    html, body {
-
-        background: #000000 url("./../../assets/images/arena-mobile.webp") no-repeat center center fixed;
-    }
-
+.btn {
+  display: block; width: 100%; margin: 10px 0 0;
+  padding: 13px 18px; font-size: 15px; font-weight: 600;
+  border-radius: 12px; border: 1px solid rgba(255,255,255,.16);
+  background: rgba(255,255,255,.06);
+  transition: transform .12s ease, background .2s ease, border-color .2s;
+  min-height: 46px;                      /* alvo de toque confortável */
+}
+.btn:hover { background: rgba(255,255,255,.12); border-color: var(--accent-2); }
+.btn:active { transform: scale(.98); }
+.btn--primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color: transparent; color: #241400;
+}
+.btn:focus-visible, .icon-btn:focus-visible, .link-btn:focus-visible, .lang-btn:focus-visible {
+  outline: 3px solid var(--shield); outline-offset: 2px;
 }
 
-canvas {
-    display: block;
-    margin: 0 auto;
-    border: 4px solid #e27630;
+.lang-row { display: flex; gap: 6px; justify-content: center; margin-top: 18px; }
+.lang-btn {
+  padding: 6px 11px; font-size: 12px; font-weight: 600;
+  border-radius: 9px; border: 1px solid rgba(255,255,255,.14);
+  background: transparent; color: var(--muted);
+}
+.lang-btn.is-active { background: var(--accent); border-color: var(--accent); color: #241400; }
+
+.record-badge {
+  margin: 0 0 12px; display: inline-block;
+  background: var(--accent); color: #241400;
+  padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 700;
+  animation: pop .4s ease-out;
+}
+.score-grid { display: flex; gap: 8px; margin: 4px 0 6px; }
+.score-grid > div {
+  flex: 1; background: rgba(0,0,0,.3); border-radius: 12px; padding: 10px 6px;
+  display: flex; flex-direction: column; gap: 2px;
+}
+.score-grid span { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.score-grid strong { font-size: 22px; font-variant-numeric: tabular-nums; }
+
+#countdownText {
+  font-size: clamp(64px, 22vw, 140px); font-weight: 800; color: #fff;
+  text-shadow: 0 0 40px rgba(251,140,0,.8);
+  animation: pop .32s ease-out;
 }
 
-/* ---------- UI & POSIÇÃO ---------- */
-#ui {
-    position: absolute;
-    top: 10px;
-    left: 0;
-    right: 0;
-    text-align: center;
-    color: white;
-    font-size: 18px;
-    z-index: 10;
+/* Como jogar: ícones em CSS, sem GIF de 2,6 MB no caminho crítico */
+.help-list { list-style: none; margin: 0 0 18px; padding: 0; display: grid; gap: 12px; }
+.help-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 13.5px; line-height: 1.45; color: #ded8e6; }
+.help-ico {
+  flex: 0 0 34px; height: 34px; border-radius: 10px;
+  display: grid; place-items: center; font-size: 17px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1);
 }
+.help-ico--move::before { content: "🕹"; }
+.help-ico--box::before { content: "📦"; }
+.help-ico--ghost::before { content: "👻"; }
+.help-ico--power::before { content: "⭐"; }
+.help-ico--shield::before { content: "🛡"; }
+.help-ico--combo::before { content: "🔥"; }
 
-#soundToggle {
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    z-index: 20;
-    background: #e27630;
-    border: none;
-    color: white;
-    font-size: 14px;
-    padding: 6px 12px;
-    border-radius: 5px;
-    cursor: pointer;
+.prose { max-height: 46dvh; overflow: auto; font-size: 13.5px; line-height: 1.6; color: #ded8e6; padding-right: 6px; }
+.prose a { color: var(--accent); }
+.prose p { margin: 0 0 10px; }
+.prose::-webkit-scrollbar { width: 8px; }
+.prose::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 8px; }
+
+/* ---------- AVISO FLUTUANTE ---------- */
+#toast {
+  position: fixed; left: 50%; bottom: calc(76px + var(--safe-b));
+  transform: translate(-50%, 14px);
+  background: rgba(0,0,0,.82); border: 1px solid rgba(255,255,255,.12);
+  padding: 8px 16px; border-radius: 99px; font-size: 13px;
+  opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+  z-index: 90;
 }
-
-/* ---------- TELAS SOBREPOSTAS ---------- */
-#startScreen,
-#gameOverScreen,
-#countdown {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 24px;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(4px);
-    z-index: 10;
-}
-
-#startScreen img {
-
-    border-radius: 10px;
-}
-
-#gameOverScreen,
-#countdown,
-#aboutModal {
-    display: none;
-}
-
-#aboutModal {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.90);
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 24px;
-    padding: 0 40px;
-    box-sizing: border-box;
-    z-index: 1000;
-}
-
-/* ---------- TEXTO ---------- */
-h1 {
-    margin: 10px 0 0 0;
-    font-size: 25px;
-    text-transform: uppercase;
-    text-align: center;
-    color: #FB8C00;
-}
-
-#instructions {
-    font-size: 13px;
-    margin-top: 10px;
-    color: #aaa;
-    width: 200px;
-    text-align: center;
-}
-
-#aboutModal p {
-    max-width: 600px;
-    text-align: center;
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-#aboutContent {
-
-    height: 40vh;
-    overflow: auto;
-    padding-right: 10px;
-}
-
-#aboutContent a {
-
-    color: #FB8C00;
-}
-
-#aboutContent::-webkit-scrollbar {
-    width: 10px;
-}
-
-#aboutContent::-webkit-scrollbar-track {
-    background: #eee;
-    border-radius: 10px;
-}
-
-#aboutContent::-webkit-scrollbar-thumb {
-    background: #FB8C00;
-    border-radius: 10px;
-    border: 2px solid #eee;
-}
-
-/* ---------- BOTÕES ---------- */
-button {
-    position: relative;
-    display: inline-block;
-    margin-top: 20px;
-    font-size: 14px;
-    padding: 10px 25px;
-    border: 2px solid #e27630;
-    color: #fff;
-    background: transparent;
-    border-radius: 10px;
-    cursor: pointer;
-    overflow: hidden;
-    transition: 0.3s;
-    z-index: 1;
-}
-
-#gameOverTitle {
-
-    margin: 0;
-}
-
-button::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(from 0deg, #ff6600, #ffae42, #ff6600, #e27630, #ffae42, #ff6600);
-    animation: rotateBorder 3s linear infinite;
-    z-index: -2;
-}
-
-button::after {
-    content: '';
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    right: 2px;
-    bottom: 2px;
-    background: #1c1425;
-    border-radius: 8px;
-    z-index: -1;
-}
-
-button:hover {
-    color: #ffae42;
-    transform: scale(1.05);
-    border-color: #ffae42;
-}
-
-/* ---------- LAYOUT EXTRA ---------- */
-#gameWrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 16px;
-    width: 100%;
-    max-width: 600px;
-    margin: 0 auto;
-    flex-wrap: nowrap;
-    position: relative;
-    height: 100vh;
-
-}
-
-.center-game {
-
-    display: flex;
-    gap: 10px;
-    position: relative;
-}
-
-@media (max-width: 600px) {
-
-    .center-game {
-        flex-direction: column;
-    }
-
-}
-
-.powerup-column {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    justify-content: center;
-}
-
-#footer {
-    position: absolute;
-    bottom: 35px;
-    width: 100%;
-    text-align: center;
-    z-index: 10;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    color: #fff;
-}
-
-#footer a {
-    color: #e27630;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 14px;
-}
-
-#footer .game-pwa {
-
-    display: block;
-    position: relative;
-    z-index: 2222;
-    color: #ff9800;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-@media (max-width: 600px) {
-
-    #footer {
-
-        bottom: 15px;
-    }
-
-}
-
-#homeButton {
-    margin-top: 10px;
-    cursor: pointer;
-}
-
-/* ---------- BANDEIRAS ---------- */
-#aboutModal #langSelect,
-#langSelect {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    height: 80px;
-    position: relative;
-    z-index: 0;
-}
-
-.flag-btn {
-    font-size: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    outline: none;
-}
-
-.flag-btn:focus {
-    outline: none;
-    box-shadow: none;
-}
-
-.flag-btn svg {
-    width: 30px;
-}
-
-.flag-btn.selected-lang {
-    color: white !important;
-    background-color: #fff;
-}
-
-.flag-btn.selected-lang::before {
-    opacity: 0 !important;
-    animation: none !important;
-    background: conic-gradient(from 0deg, white, white, white);
-}
-
-/* ---------- FLAGS CANTOS ---------- */
-.corner-flag {
-    position: absolute;
-    width: 62px;
-    height: 62px;
-    pointer-events: none;
-    z-index: 1;
-}
-
-#flag-tl {
-    transform: rotate(-45deg);
-    left: 30px;
-    top: -60px;
-}
-
-#flag-tr {
-    transform: rotate(45deg);
-    right: 10px;
-    top: -40px;
-}
-
-#flag-bl {
-    transform: rotate(-135deg);
-    left: 10px;
-    bottom: -35px;
-}
-
-#flag-br {
-    transform: rotate(135deg);
-    right: 32px;
-    bottom: -60px;
-}
+#toast.is-open { opacity: 1; transform: translate(-50%, 0); }
 
 /* ---------- ANIMAÇÕES ---------- */
-#countdownText {
-    font-size: 64px;
-    font-weight: bold;
-    animation: scale 0.3s ease-in-out;
+@keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes rise { from { transform: translateY(14px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
 
-@keyframes scale {
-    0% {
-        transform: scale(0);
-        opacity: 0;
-    }
+/* ======================================================================
+   IDENTIDADE VISUAL — logo, bandeirinhas da arena e bandeiras de idioma
+   ====================================================================== */
 
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+/* ---------- LOGO ---------- */
+.logo-wrap { margin: 0 0 2px; line-height: 0; }
+.logo-img {
+  display: block;
+  width: min(190px, 46vw);
+  height: auto;
+  margin: 0 auto 4px;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.12), 0 10px 30px rgba(0,0,0,.6);
+}
+.loader-logo-img {
+  width: min(150px, 38vw);
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.1), 0 8px 26px rgba(0,0,0,.6);
 }
 
-@keyframes rotateBorder {
-    0% {
-        transform: rotate(0deg);
-    }
+/* ---------- BANDEIRINHAS NOS CANTOS DA ARENA ---------- */
+/* No original elas eram posicionadas em pixels fixos (top:-60px, left:30px…)
+   e saíam do lugar em qualquer tela diferente. Agora ficam ancoradas no
+   próprio tabuleiro, então acompanham qualquer tamanho. */
+.board-stack { position: relative; display: inline-block; line-height: 0; }
 
-    100% {
-        transform: rotate(360deg);
-    }
+.corner-flag {
+  position: absolute;
+  width: clamp(34px, 13%, 62px);
+  height: auto;
+  pointer-events: none;
+  z-index: 2;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,.6));
+}
+.corner-flag svg { width: 100%; height: auto; display: block; }
+
+#flag-tl { left: 4%;  top: -9%;  transform: rotate(-45deg); }
+#flag-tr { right: 4%; top: -9%;  transform: rotate(45deg); }
+#flag-bl { left: 4%;  bottom: -9%; transform: rotate(-135deg); }
+#flag-br { right: 4%; bottom: -9%; transform: rotate(135deg); }
+
+/* Em tela baixa não há folga acima e abaixo do tabuleiro para elas. */
+@media (max-height: 560px), (max-width: 420px) {
+  .corner-flag { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .corner-flag animate { display: none; }
 }
 
-/* ---------- RESPONSIVO ---------- */
-@media (max-width: 600px) {
-    #aboutModal {
-        font-size: 16px;
-    }
-
-    #aboutModal p {
-        font-size: 12px;
-    }
-
-    #gameWrapper {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .powerup-column {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 4px;
-        margin-top: 12px;
-    }
-
-    .powerup-column img {
-        width: 40px !important;
-        height: 40px !important;
-    }
-
-    .corner-flag {
-        display: none;
-    }
+/* ---------- BANDEIRAS DE IDIOMA ---------- */
+.lang-row { gap: 10px; }
+.lang-btn {
+  width: 42px; height: 42px; padding: 0;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: transparent;
+  display: grid; place-items: center;
+  transition: transform .15s ease, border-color .2s ease, box-shadow .2s ease;
+  overflow: visible;
 }
+.lang-btn svg { width: 30px; height: 30px; display: block; border-radius: 50%; }
+.lang-btn:hover { transform: scale(1.12); }
+.lang-btn.is-active {
+  border-color: var(--accent);
+  background: transparent;
+  box-shadow: 0 0 0 3px rgba(251,140,0,.25), 0 0 14px rgba(251,140,0,.5);
+  transform: scale(1.08);
+}
+.lang-btn.is-active svg { border-radius: 50%; }

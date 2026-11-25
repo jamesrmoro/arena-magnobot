@@ -6,11 +6,12 @@ Arena Magnobot is a fast-paced, retro-style online game where you control a magn
 
 > A high-speed retro arena game where you control a magnetic robot and dodge dangerous products while collecting power-ups — built entirely with JavaScript and HTML5 Canvas!
 
-- **Playable online & mobile-friendly**
-- Built with [CreateJS](https://createjs.com/)
+- **Playable online, on desktop and mobile, portrait and landscape**
+- Zero dependencies — plain Canvas 2D, ~100 KB first load
+- Keyboard, swipe, on-screen D-pad and tap-to-turn
 - Deployed automatically to **Alibaba Cloud OSS** using **GitHub Actions**
-- Supports multiple languages (PT 🇧🇷 / EN 🇺🇸 / ZH 🇨🇳)
-- PWA ready — install the game on your device and play offline!
+- Four languages (PT 🇧🇷 / EN 🇺🇸 / ES 🇪🇸 / ZH 🇨🇳), auto-detected and remembered
+- PWA — install the game on your device and play offline
 
 ---
 
@@ -27,10 +28,14 @@ The project runs fully in the browser and is optimized for both desktop and mobi
 ## Technologies Used
 
 - HTML5 + CSS3
-- JavaScript (vanilla)
-- [CreateJS](https://createjs.com/) for canvas animation
+- JavaScript (vanilla, no framework, no external library)
+- Canvas 2D with a fixed-timestep loop and interpolated movement
 - GitHub Actions (CI/CD)
 - Alibaba Cloud OSS (Object Storage Service)
+
+The whole game loads in about **100 KB**. There is no engine dependency:
+rendering, input, audio and state are each a small module under
+`public/assets/js/`.
 
 ---
 
@@ -50,13 +55,36 @@ Every push to the `main` branch triggers a GitHub Actions workflow that:
 
 ```plaintext
 /
-├── public/
+├── public/                  # tudo o que vai para o ar
 │   ├── index.html
-│   ├── assets/
-│   └── ...
-├── .github/workflows/
-│   └── deploy.yml
+│   ├── manifest.json
+│   ├── service-worker.js
+│   └── assets/
+│       ├── css/style.css
+│       ├── js/              # config, storage, i18n, audio, assets,
+│       │                    # renderer, input, ui, game, main
+│       ├── images/
+│       ├── sounds/
+│       ├── icons/
+│       └── favicon/
+├── tools/                   # geradores dos materiais da Google Play
+│   ├── scene.py
+│   └── gen_store_assets.py
+├── store/                   # ícone, gráfico de destaque, capturas e ficha
+├── legacy/                  # código e assets da versão anterior (não publicados)
+├── .github/workflows/deploy.yml
+├── RELATORIO-MELHORIAS.md   # o que mudou e por quê
 └── README.md
+```
+
+## Materiais da Google Play
+
+Ícone, gráfico de destaque e capturas de celular e tablet ficam em `store/`,
+junto com o texto da ficha (`store/ficha-google-play.md`). Para regerar tudo
+depois de mexer na arte:
+
+```bash
+python3 tools/gen_store_assets.py
 ```
 
 ---
