@@ -41,6 +41,24 @@ rendering, input, audio and state are each a small module under
 
 ## Automatic Deployment
 
+### HostGator (hospedagem atual)
+
+Para publicar manualmente, envie **o conteúdo de `public/`** para a pasta raiz
+configurada no cPanel para `arena-magnobot.sprintcodes.com.br`. Nessa pasta devem
+ficar `index.html`, `manifest.json`, `service-worker.js` e `assets/`, lado a lado.
+Não é necessário enviar `.git/`, `.github/`, `legacy/`, `store/` ou `tools/`.
+
+Se a estrutura enviada mantiver a pasta `public/`, envie também o `index.html`
+da raiz deste repositório: ele encaminha o visitante para `./public/`.
+Não use esse arquivo de encaminhamento ao enviar apenas o conteúdo de `public/`;
+nesse caso, o index correto é o próprio `public/index.html`.
+
+Se o erro 403 persistir, confira se a pasta do subdomínio está correta no cPanel,
+se não há regras de bloqueio em um `.htaccess` existente e se as permissões são
+`644` para arquivos e `755` para diretórios. Use HTTPS para o PWA funcionar.
+
+### Workflow legado: Alibaba OSS
+
 Every push to the `main` branch triggers a GitHub Actions workflow that:
 
 1. Downloads and configures `ossutil` (Alibaba OSS CLI)
