@@ -9,7 +9,7 @@ Arena Magnobot is a fast-paced, retro-style online game where you control a magn
 - **Playable online, on desktop and mobile, portrait and landscape**
 - Zero dependencies — plain Canvas 2D, ~100 KB first load
 - Keyboard, swipe, on-screen D-pad and tap-to-turn
-- Deployed automatically to **Alibaba Cloud OSS** using **GitHub Actions**
+- Hosted on **HostGator**; legacy Alibaba OSS deployment is manual
 - Four languages (PT 🇧🇷 / EN 🇺🇸 / ES 🇪🇸 / ZH 🇨🇳), auto-detected and remembered
 - PWA — install the game on your device and play offline
 
@@ -35,7 +35,7 @@ The project runs fully in the browser and is optimized for both desktop and mobi
 
 The whole game loads in about **100 KB**. There is no engine dependency:
 rendering, input, audio and state are each a small module under
-`public/assets/js/`.
+`assets/js/`.
 
 ---
 
@@ -43,32 +43,23 @@ rendering, input, audio and state are each a small module under
 
 ### HostGator (hospedagem atual)
 
-Para publicar manualmente, envie **o conteúdo de `public/`** para a pasta raiz
-configurada no cPanel para `arena-magnobot.sprintcodes.com.br`. Nessa pasta devem
-ficar `index.html`, `manifest.json`, `service-worker.js` e `assets/`, lado a lado.
-Não é necessário enviar `.git/`, `.github/`, `legacy/`, `store/` ou `tools/`.
+O jogo agora fica diretamente na raiz do projeto. Envie estes itens para a pasta
+configurada no cPanel para `arena-magnobot.sprintcodes.com.br`:
 
-Se a estrutura enviada mantiver a pasta `public/`, envie também o `.htaccess`
-da raiz deste repositório. Ele serve os arquivos de `public/` internamente,
-mantendo a URL `https://arena-magnobot.sprintcodes.com.br/`, sem `/public/`.
-Remova da hospedagem o antigo `index.html` da raiz que encaminhava para `/public/`.
-Ative a exibição de arquivos ocultos no gerenciador de arquivos para ver `.htaccess`.
-Não envie esse `.htaccess` ao publicar apenas o conteúdo de `public/` diretamente;
-nessa opção, o index na raiz é o próprio `public/index.html`.
+- `index.html` (a página completa do jogo)
+- `assets/`
+- `manifest.json`
+- `service-worker.js`
+- `.htaccess` (substitua a versão anterior com regras para `public/`)
 
-Se o erro 403 persistir, confira se a pasta do subdomínio está correta no cPanel,
-se não há regras de bloqueio em um `.htaccess` existente e se as permissões são
-`644` para arquivos e `755` para diretórios. Use HTTPS para o PWA funcionar.
+Substitua o antigo `index.html` da hospedagem. O endereço abre o jogo diretamente,
+sem link intermediário e sem `/public/`. Não envie `.git/`, `.github/`, `legacy/`,
+`store/` ou `tools/`. Use HTTPS para o PWA funcionar.
 
 ### Workflow legado: Alibaba OSS
 
-Every push to the `main` branch triggers a GitHub Actions workflow that:
-
-1. Downloads and configures `ossutil` (Alibaba OSS CLI)
-2. Uploads the contents of the `public/` folder to the OSS bucket
-3. Publishes your static game site online
-
-> No local CLI commands needed — everything runs in the cloud!
+O deploy antigo para Alibaba OSS agora é apenas manual (`workflow_dispatch`).
+Pushes não publicam mais no provedor anterior.
 
 ---
 
@@ -76,25 +67,15 @@ Every push to the `main` branch triggers a GitHub Actions workflow that:
 
 ```plaintext
 /
-├── public/                  # tudo o que vai para o ar
-│   ├── index.html
-│   ├── manifest.json
-│   ├── service-worker.js
-│   └── assets/
-│       ├── css/style.css
-│       ├── js/              # config, storage, i18n, audio, assets,
-│       │                    # renderer, input, ui, game, main
-│       ├── images/
-│       ├── sounds/
-│       ├── icons/
-│       └── favicon/
+├── index.html               # página completa do jogo
+├── assets/                  # CSS, JavaScript, imagens, ícones e sons
+├── manifest.json
+├── service-worker.js
+├── .htaccess                # entrada padrão do Apache
 ├── tools/                   # geradores dos materiais da Google Play
-│   ├── scene.py
-│   └── gen_store_assets.py
-├── store/                   # ícone, gráfico de destaque, capturas e ficha
-├── legacy/                  # código e assets da versão anterior (não publicados)
-├── .github/workflows/deploy.yml
-├── RELATORIO-MELHORIAS.md   # o que mudou e por quê
+├── store/                   # materiais da loja
+├── legacy/                  # versão anterior (não publicar)
+├── .github/workflows/deploy.yml # Alibaba OSS: apenas execução manual
 └── README.md
 ```
 
