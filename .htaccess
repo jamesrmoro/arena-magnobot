@@ -1,0 +1,11 @@
+# HostGator / Apache: publica somente public/ sem expor a pasta na URL.
+DirectoryIndex index.html
+RewriteEngine On
+
+# Corrige acessos antigos a /public/ sem afetar reescritas internas.
+RewriteCond %{THE_REQUEST} \s/+public(?:[/?\s]) [NC]
+RewriteRule ^public/?(.*)$ /$1 [R=302,L]
+
+# A raiz usa o index do jogo; os demais caminhos usam seus arquivos públicos.
+RewriteRule ^$ public/index.html [L]
+RewriteRule ^(?!public/)(.*)$ public/$1 [L]

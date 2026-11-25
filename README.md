@@ -48,10 +48,13 @@ configurada no cPanel para `arena-magnobot.sprintcodes.com.br`. Nessa pasta deve
 ficar `index.html`, `manifest.json`, `service-worker.js` e `assets/`, lado a lado.
 Não é necessário enviar `.git/`, `.github/`, `legacy/`, `store/` ou `tools/`.
 
-Se a estrutura enviada mantiver a pasta `public/`, envie também o `index.html`
-da raiz deste repositório: ele encaminha o visitante para `./public/`.
-Não use esse arquivo de encaminhamento ao enviar apenas o conteúdo de `public/`;
-nesse caso, o index correto é o próprio `public/index.html`.
+Se a estrutura enviada mantiver a pasta `public/`, envie também o `.htaccess`
+da raiz deste repositório. Ele serve os arquivos de `public/` internamente,
+mantendo a URL `https://arena-magnobot.sprintcodes.com.br/`, sem `/public/`.
+Remova da hospedagem o antigo `index.html` da raiz que encaminhava para `/public/`.
+Ative a exibição de arquivos ocultos no gerenciador de arquivos para ver `.htaccess`.
+Não envie esse `.htaccess` ao publicar apenas o conteúdo de `public/` diretamente;
+nessa opção, o index na raiz é o próprio `public/index.html`.
 
 Se o erro 403 persistir, confira se a pasta do subdomínio está correta no cPanel,
 se não há regras de bloqueio em um `.htaccess` existente e se as permissões são
