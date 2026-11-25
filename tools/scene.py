@@ -5,7 +5,7 @@ Os sprites sao os mesmos arquivos que o jogo carrega."""
 import os
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
-ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'public', 'assets')
+ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'assets')
 IMG = os.path.join(ROOT, 'images')
 GF = '/usr/share/fonts/truetype/google-fonts/'
 

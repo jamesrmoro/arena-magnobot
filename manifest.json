@@ -6,26 +6,168 @@
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "display_override": ["fullscreen", "standalone"],
+  "display_override": [
+    "fullscreen",
+    "standalone"
+  ],
   "orientation": "any",
   "background_color": "#120d1a",
   "theme_color": "#120d1a",
   "lang": "pt-BR",
   "dir": "ltr",
-  "categories": ["games", "entertainment"],
+  "categories": [
+    "games",
+    "entertainment"
+  ],
   "icons": [
-    { "src": "./assets/icons/android/android-launchericon-48-48.png", "sizes": "48x48", "type": "image/png", "purpose": "any" },
-    { "src": "./assets/icons/android/android-launchericon-72-72.png", "sizes": "72x72", "type": "image/png", "purpose": "any" },
-    { "src": "./assets/icons/android/android-launchericon-96-96.png", "sizes": "96x96", "type": "image/png", "purpose": "any" },
-    { "src": "./assets/icons/android/android-launchericon-144-144.png", "sizes": "144x144", "type": "image/png", "purpose": "any" },
-    { "src": "./assets/icons/android/android-launchericon-192-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "./assets/icons/android/android-launchericon-512-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "./assets/icons/android/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
-    { "src": "./assets/icons/android/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "./assets/icons/android/android-launchericon-48-48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/android/android-launchericon-72-72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/android/android-launchericon-96-96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/android/android-launchericon-144-144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/android/android-launchericon-192-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/android/android-launchericon-512-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/icons/android/maskable-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "./assets/icons/android/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "screenshots": [
-    { "src": "./assets/images/cover.jpg", "sizes": "1000x420", "type": "image/jpeg", "form_factor": "wide", "label": "Arena Magnobot em ação" },
-    { "src": "./assets/images/cover-2.jpg", "sizes": "1000x420", "type": "image/jpeg", "form_factor": "wide", "label": "Coletando power-ups" }
+    {
+      "src": "./assets/screenshots/phone/01-arena.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Arena Magnobot em ação — celular"
+    },
+    {
+      "src": "./assets/screenshots/phone/02-combo.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Combos e multiplicadores — celular"
+    },
+    {
+      "src": "./assets/screenshots/phone/03-powerup.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Coleção de power-ups — celular"
+    },
+    {
+      "src": "./assets/screenshots/phone/04-shield.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Escudo magnético — celular"
+    },
+    {
+      "src": "./assets/screenshots/phone/05-ghosts.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Desvie dos fantasmas — celular"
+    },
+    {
+      "src": "./assets/screenshots/phone/06-record.png",
+      "sizes": "1080x1920",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Supere seu recorde — celular"
+    },
+    {
+      "src": "./assets/screenshots/tablet7/01-arena.png",
+      "sizes": "1920x1200",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Arena Magnobot em ação — tablet 7 polegadas"
+    },
+    {
+      "src": "./assets/screenshots/tablet7/02-combo.png",
+      "sizes": "1920x1200",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Combos e multiplicadores — tablet 7 polegadas"
+    },
+    {
+      "src": "./assets/screenshots/tablet7/03-powerup.png",
+      "sizes": "1920x1200",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Coleção de power-ups — tablet 7 polegadas"
+    },
+    {
+      "src": "./assets/screenshots/tablet7/04-shield.png",
+      "sizes": "1920x1200",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Escudo magnético — tablet 7 polegadas"
+    },
+    {
+      "src": "./assets/screenshots/tablet10/01-arena.png",
+      "sizes": "2560x1600",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Arena Magnobot em ação — tablet 10 polegadas"
+    },
+    {
+      "src": "./assets/screenshots/tablet10/02-combo.png",
+      "sizes": "2560x1600",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Combos e multiplicadores — tablet 10 polegadas"
+    },
+    {
+      "src": "./assets/screenshots/tablet10/03-powerup.png",
+      "sizes": "2560x1600",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Coleção de power-ups — tablet 10 polegadas"
+    },
+    {
+      "src": "./assets/screenshots/tablet10/04-shield.png",
+      "sizes": "2560x1600",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Escudo magnético — tablet 10 polegadas"
+    }
   ],
   "prefer_related_applications": false
 }

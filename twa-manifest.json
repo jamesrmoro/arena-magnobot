@@ -1,0 +1,29 @@
+{
+  "packageId": "br.com.sprintcodes.arenamagnobot.app",
+  "host": "arena-magnobot.sprintcodes.com.br",
+  "name": "Arena Magnobot",
+  "launcherName": "Magnobot",
+  "display": "standalone",
+  "themeColor": "#120d1a",
+  "navigationColor": "#050d16",
+  "backgroundColor": "#120d1a",
+  "enableNotifications": false,
+  "startUrl": "/",
+  "iconUrl": "https://arena-magnobot.sprintcodes.com.br/assets/icons/android/android-launchericon-512-512.png",
+  "maskableIconUrl": "https://arena-magnobot.sprintcodes.com.br/assets/icons/android/maskable-512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersion": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "webManifestUrl": "https://arena-magnobot.sprintcodes.com.br/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "orientation": "any",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "fullScopeUrl": "https://arena-magnobot.sprintcodes.com.br/"
+}

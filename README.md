@@ -9,7 +9,7 @@ Arena Magnobot is a fast-paced, retro-style online game where you control a magn
 - **Playable online, on desktop and mobile, portrait and landscape**
 - Zero dependencies — plain Canvas 2D, ~100 KB first load
 - Keyboard, swipe, on-screen D-pad and tap-to-turn
-- Hosted on **HostGator**; legacy Alibaba OSS deployment is manual
+- Hosted on **HostGator**
 - Four languages (PT 🇧🇷 / EN 🇺🇸 / ES 🇪🇸 / ZH 🇨🇳), auto-detected and remembered
 - PWA — install the game on your device and play offline
 
@@ -30,8 +30,7 @@ The project runs fully in the browser and is optimized for both desktop and mobi
 - HTML5 + CSS3
 - JavaScript (vanilla, no framework, no external library)
 - Canvas 2D with a fixed-timestep loop and interpolated movement
-- GitHub Actions (CI/CD)
-- Alibaba Cloud OSS (Object Storage Service)
+- HostGator (hospedagem estática)
 
 The whole game loads in about **100 KB**. There is no engine dependency:
 rendering, input, audio and state are each a small module under
@@ -39,7 +38,7 @@ rendering, input, audio and state are each a small module under
 
 ---
 
-## Automatic Deployment
+## Publicação
 
 ### HostGator (hospedagem atual)
 
@@ -56,10 +55,34 @@ Substitua o antigo `index.html` da hospedagem. O endereço abre o jogo diretamen
 sem link intermediário e sem `/public/`. Não envie `.git/`, `.github/`, `legacy/`,
 `store/` ou `tools/`. Use HTTPS para o PWA funcionar.
 
-### Workflow legado: Alibaba OSS
+### Android / Bubblewrap
 
-O deploy antigo para Alibaba OSS agora é apenas manual (`workflow_dispatch`).
-Pushes não publicam mais no provedor anterior.
+O identificador Android está em `twa-manifest.json`, no campo `packageId`:
+`br.com.sprintcodes.arenamagnobot.app`. Bubblewrap utiliza esse arquivo, não
+`package.json`. O app abre a raiz de `https://arena-magnobot.sprintcodes.com.br/`.
+
+Esta é uma configuração inicial: não há projeto Android nem chave de assinatura
+neste repositório. Antes de gerar o app, ajuste `signingKey.path` e
+`signingKey.alias` para sua chave real. Se já existe uma versão publicada,
+preserve a chave e use os números de versão do projeto Android existente.
+Não substitua sua chave existente pela configuração padrão `android.keystore`.
+
+No projeto Android gerenciado pelo Bubblewrap, aplique o `packageId` acima no
+`twa-manifest.json` usado pelo build e execute `bubblewrap update` e
+`bubblewrap build`. A configuração deste repositório não altera um build feito
+em outra pasta automaticamente. A associação Digital Asset Links também precisa
+usar o mesmo pacote e o fingerprint real do certificado de assinatura.
+
+As prévias ficam no campo `screenshots` de `manifest.json`: 6 de celular e 8 de
+tablet, com as dimensões reais e os formatos `narrow` e `wide`. Os arquivos públicos
+estão em `assets/screenshots/`; envie essa pasta junto com os demais assets.
+Os originais para a Google Play ficam em `store/phone`, `store/tablet7` e
+`store/tablet10`. Essas imagens são materiais promocionais gerados por
+`tools/gen_store_assets.py`, não capturas automatizadas do navegador.
+Elas são metadados de apresentação/instalação, não a tela de splash do Android.
+O upload na Google Play Console é separado.
+
+Não há integração de deploy com Alibaba OSS neste repositório.
 
 ---
 
@@ -75,7 +98,7 @@ Pushes não publicam mais no provedor anterior.
 ├── tools/                   # geradores dos materiais da Google Play
 ├── store/                   # materiais da loja
 ├── legacy/                  # versão anterior (não publicar)
-├── .github/workflows/deploy.yml # Alibaba OSS: apenas execução manual
+├── twa-manifest.json        # configuração Android / Bubblewrap
 └── README.md
 ```
 
