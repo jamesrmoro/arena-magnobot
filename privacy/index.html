@@ -48,6 +48,8 @@
   nav.langs a[aria-current="true"] { color: #1a1008; background: var(--accent); border-color: var(--accent); }
   main { max-width: 820px; margin: 0 auto; padding: 28px 20px 64px; }
   article + article { margin-top: 56px; padding-top: 40px; border-top: 1px solid var(--panel-2); }
+  /* Com JS só um idioma aparece: sem separador nem espaço sobrando. */
+  .js article + article { margin-top: 0; padding-top: 0; border-top: 0; }
   h1 { font-size: clamp(26px, 5vw, 34px); line-height: 1.2; margin: 0 0 6px; }
   .updated { color: var(--muted); margin: 0 0 24px; font-size: 14px; }
   h2 { font-size: 19px; color: var(--accent-2); margin: 32px 0 8px; }
@@ -351,6 +353,7 @@
  * Ordem: ?lang= → #pt/#en/#es/#zh → idioma salvo pelo jogo → idioma do aparelho → inglês. */
 (function () {
   'use strict';
+  document.documentElement.classList.add('js');
   var SUPPORTED = ['pt', 'en', 'es', 'zh'];
   var TITLES = {
     pt: 'Política de Privacidade — Arena Magnobot',
