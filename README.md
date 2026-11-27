@@ -49,6 +49,7 @@ configurada no cPanel para `arena-magnobot.sprintcodes.com.br`:
 - `assets/`
 - `manifest.json`
 - `service-worker.js`
+- `privacy/` (política de privacidade, em `/privacy` — use esta URL na Google Play)
 - `.htaccess` (substitua a versão anterior com regras para `public/`)
 
 Substitua o antigo `index.html` da hospedagem. O endereço abre o jogo diretamente,

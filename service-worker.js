@@ -6,7 +6,7 @@
  *    UM item falhar, então a instalação nunca completava;
  *  - a estratégia era cache-first para tudo, inclusive o HTML: depois do
  *    primeiro acesso o jogador ficava preso numa versão velha para sempre. */
-const VERSION = 'v5';
+const VERSION = 'v6';
 const SHELL = 'magnobot-shell-' + VERSION;
 const RUNTIME = 'magnobot-runtime-' + VERSION;
 
@@ -14,17 +14,17 @@ const SHELL_FILES = [
   './',
   './index.html',
   './manifest.json',
-  './assets/css/style.css?v=5',
-  './assets/js/config.js?v=5',
-  './assets/js/storage.js?v=5',
-  './assets/js/i18n.js?v=5',
-  './assets/js/audio.js?v=5',
-  './assets/js/assets.js?v=5',
-  './assets/js/renderer.js?v=5',
-  './assets/js/input.js?v=5',
-  './assets/js/ui.js?v=5',
-  './assets/js/game.js?v=5',
-  './assets/js/main.js?v=5',
+  './assets/css/style.css?v=6',
+  './assets/js/config.js?v=6',
+  './assets/js/storage.js?v=6',
+  './assets/js/i18n.js?v=6',
+  './assets/js/audio.js?v=6',
+  './assets/js/assets.js?v=6',
+  './assets/js/renderer.js?v=6',
+  './assets/js/input.js?v=6',
+  './assets/js/ui.js?v=6',
+  './assets/js/game.js?v=6',
+  './assets/js/main.js?v=6',
   './assets/images/robot.png',
   './assets/images/robot-actived-1.png',
   './assets/images/robot-actived-2.png',
@@ -68,12 +68,23 @@ self.addEventListener('fetch', event => {
   // HTML: rede primeiro, para o jogador receber atualizações.
   if (req.mode === 'navigate' || (req.headers.get('accept') || '').includes('text/html')) {
     event.respondWith((async () => {
+      // Só a página do jogo vai para o slot './index.html'. Antes, qualquer
+      // página aberta (ex.: /privacy) sobrescrevia a cópia offline do jogo.
+      const path = new URL(req.url).pathname;
+      const scope = new URL(self.registration.scope).pathname;
+      const isGame = path === scope || path === scope + 'index.html';
       try {
         const fresh = await fetch(req);
-        const cache = await caches.open(SHELL);
-        cache.put('./index.html', fresh.clone());
+        if (fresh && fresh.ok) {
+          const cache = await caches.open(isGame ? SHELL : RUNTIME);
+          cache.put(isGame ? './index.html' : req, fresh.clone());
+        }
         return fresh;
       } catch (_) {
+        if (!isGame) {
+          const page = await caches.match(req, { ignoreSearch: true });
+          if (page) return page;
+        }
         return (await caches.match('./index.html')) || Response.error();
       }
     })());

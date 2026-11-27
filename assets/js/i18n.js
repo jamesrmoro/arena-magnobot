@@ -41,7 +41,8 @@ const TRANSLATIONS = {
     aboutHtml: `<p><strong>Arena Magnobot</strong> é um arcade retrô: você comanda um robô magnético na maior central de entregas da galáxia.</p>
       <p>Colete caixas para pontuar — cada uma deixa o robô mais rápido. Produtos raros valem o triplo e preenchem sua coleção. Fantasmas de carga avariada são fatais, mas piscam antes de ativar.</p>
       <p>A cada oito caixas você ganha um escudo magnético que absorve uma batida. Sequências rápidas multiplicam a pontuação.</p>
-      <p><strong>Crédito de som:</strong> That Game Arcade Medium — <a href="https://pixabay.com/music/video-games-that-game-arcade-medium-236110/" target="_blank" rel="noopener nofollow">Pixabay</a>.</p>`
+      <p><strong>Crédito de som:</strong> That Game Arcade Medium — <a href="https://pixabay.com/music/video-games-that-game-arcade-medium-236110/" target="_blank" rel="noopener nofollow">Pixabay</a>.</p>
+      <p><a href="./privacy?lang=pt" target="_blank" rel="noopener">Política de Privacidade</a></p>`
   },
   en: {
     tagline: 'Collect, dodge, survive.',
@@ -81,7 +82,8 @@ const TRANSLATIONS = {
     aboutHtml: `<p><strong>Arena Magnobot</strong> is a retro arcade game: you command a magnetic robot inside the galaxy's busiest delivery hub.</p>
       <p>Collect boxes to score — each one makes the robot faster. Rare products are worth triple and fill your collection. Damaged-cargo ghosts are fatal, but they blink before arming.</p>
       <p>Every eight boxes you earn a magnetic shield that absorbs one hit. Fast streaks multiply your score.</p>
-      <p><strong>Sound credit:</strong> That Game Arcade Medium — <a href="https://pixabay.com/music/video-games-that-game-arcade-medium-236110/" target="_blank" rel="noopener nofollow">Pixabay</a>.</p>`
+      <p><strong>Sound credit:</strong> That Game Arcade Medium — <a href="https://pixabay.com/music/video-games-that-game-arcade-medium-236110/" target="_blank" rel="noopener nofollow">Pixabay</a>.</p>
+      <p><a href="./privacy?lang=en" target="_blank" rel="noopener">Privacy Policy</a></p>`
   },
   es: {
     tagline: 'Recoge, esquiva, sobrevive.',
@@ -121,7 +123,8 @@ const TRANSLATIONS = {
     aboutHtml: `<p><strong>Arena Magnobot</strong> es un arcade retro: controlas un robot magnético en el mayor centro de entregas de la galaxia.</p>
       <p>Recoge cajas para puntuar — cada una acelera al robot. Los productos raros valen el triple. Los fantasmas de carga dañada son mortales, pero parpadean antes de activarse.</p>
       <p>Cada ocho cajas ganas un escudo magnético que absorbe un golpe. Las rachas rápidas multiplican la puntuación.</p>
-      <p><strong>Crédito de sonido:</strong> That Game Arcade Medium — <a href="https://pixabay.com/music/video-games-that-game-arcade-medium-236110/" target="_blank" rel="noopener nofollow">Pixabay</a>.</p>`
+      <p><strong>Crédito de sonido:</strong> That Game Arcade Medium — <a href="https://pixabay.com/music/video-games-that-game-arcade-medium-236110/" target="_blank" rel="noopener nofollow">Pixabay</a>.</p>
+      <p><a href="./privacy?lang=es" target="_blank" rel="noopener">Política de Privacidad</a></p>`
   },
   zh: {
     tagline: '收集、躲避、生存。',
@@ -161,7 +164,8 @@ const TRANSLATIONS = {
     aboutHtml: `<p><strong>Arena Magnobot</strong> 是一款复古街机游戏：你操控一个磁力机器人，在银河系最繁忙的配送中心中穿梭。</p>
       <p>收集箱子得分，每个箱子都会加快机器人的速度。稀有物品价值三倍。受损货物幽灵是致命的，但它们在激活前会闪烁。</p>
       <p>每八个箱子可获得一次磁力护盾，能抵挡一次撞击。快速连击可提升分数倍率。</p>
-      <p><strong>音效来源：</strong>That Game Arcade Medium — <a href="https://pixabay.com/music/video-games-that-game-arcade-medium-236110/" target="_blank" rel="noopener nofollow">Pixabay</a>。</p>`
+      <p><strong>音效来源：</strong>That Game Arcade Medium — <a href="https://pixabay.com/music/video-games-that-game-arcade-medium-236110/" target="_blank" rel="noopener nofollow">Pixabay</a>。</p>
+      <p><a href="./privacy?lang=zh" target="_blank" rel="noopener">隐私政策</a></p>`
   }
 };
 
